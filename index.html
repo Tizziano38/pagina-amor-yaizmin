@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#101b2b">
+  <title>🌱 Mundo: Nosotros ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="particles" aria-hidden="true"></div>
+
+  <section id="loadingScreen" class="screen loading-screen">
+    <div class="loading-box">
+      <div class="pixel-heart">♥</div>
+      <p id="loadingText">🌱 Cargando nuestro mundo...</p>
+      <div class="loading-bar"><span id="loadingFill"></span></div>
+      <p class="loading-tip">Preparando recuerdos...</p>
+    </div>
+  </section>
+
+  <section id="startScreen" class="screen start-screen hidden">
+    <div class="stars"></div>
+    <div class="start-card">
+      <div class="grass-block"></div>
+      <p class="eyebrow">MUNDO CARGADO</p>
+      <h1>MUNDO: Puta hermosa <span>❤️</span></h1>
+      <p class="subtitle">Un pequeño mundo construido con nuestros momentos especiales.</p>
+      <button id="enterBtn" class="mc-btn big">ENTRAR AL MUNDO</button>
+      <p class="hint">Tocá el botón para comenzar la cojida especial ✨</p>
+    </div>
+  </section>
+
+  <main id="world" class="hidden">
+    <header class="hud">
+      <div class="brand">❤️ NOSOTROS</div>
+      <div class="hud-right">
+        <div class="progress-wrap">
+          <span>EXPLORACIÓN</span>
+          <div class="progress"><i id="progressBar"></i></div>
+          <b id="progressText">0%</b>
+        </div>
+        <button id="musicBtn" class="hud-btn" aria-label="Activar o silenciar música">🎵 Música</button>
+      </div>
+    </header>
+
+    <section class="minecraft-world" id="worldTop">
+      <div class="sun"></div>
+      <div class="cloud cloud1"></div>
+      <div class="cloud cloud2"></div>
+      <div class="mountains back"></div>
+      <div class="mountains front"></div>
+
+      <div class="world-title">
+        <p>BIENVENIDA A</p>
+        <h2>NUESTRO MUNDO</h2>
+        <span>Explorá, abrí cofres y reviví nuestros momentos ❤️</span>
+      </div>
+
+      <div class="house-scene">
+        <div class="tree tree-left"><i></i></div>
+        <div class="tree tree-right"><i></i></div>
+        <div class="house">
+          <div class="roof"></div>
+          <div class="wall">
+            <div class="window"></div>
+            <div class="door"></div>
+          </div>
+        </div>
+        <div class="torch torch-left">🔥</div>
+        <div class="torch torch-right">🔥</div>
+      </div>
+
+      <div class="sign">
+        <span>🏠</span>
+        <strong>Nuestra casita</strong>
+        <small>El lugar donde empieza todo</small>
+      </div>
+
+      <button id="exploreBtn" class="mc-btn explore">EXPLORAR RECUERDOS ↓</button>
+    </section>
+
+    <section class="memories-section" id="memories">
+      <div class="section-heading">
+        <p class="eyebrow">📍 ZONAS DESCUBIERTAS</p>
+        <h2>Nuestra historia</h2>
+        <p>Cada lugar guarda un recuerdo. Tocá una foto para verla en grande.</p>
+      </div>
+      <div id="memoryGrid" class="memory-grid"></div>
+    </section>
+
+    <section class="letter-section">
+      <div class="book">
+        <div class="book-icon">📖</div>
+        <p class="eyebrow">LIBRO ENCANTADO</p>
+        <h2>Para vos ❤️</h2>
+        <p class="quote">“te amo hermosa, espero que nunca dudes lo que siento por vos.”</p>
+        <div class="letter">
+          <p>Hay recuerdos que para otras personas serian insignificante pero con vos son los momentos mas lindo de mi vida.</p>
+          <p>Te amo hermosa puta</p>
+          <p>Gracias por ser parte de mi mundo. Ojalá sigamos construyendo muchos chunks más juntos. ❤️</p>
+          <p class="signature">Con amor tu pricnipe,<br><strong>Tizziano Viera 🫶</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="secret-section" id="secret">
+      <div class="secret-card">
+        <p class="eyebrow">⚠️ ZONA OCULTA</p>
+        <h2>🔒 COFRE SECRETO</h2>
+        <p>Hay algo guardado acá que solamente vos podés descubrir.</p>
+        <button id="chestBtn" class="chest" aria-label="Abrir cofre">
+          <span class="chest-lid"></span>
+          <span class="chest-body"></span>
+          <span class="lock">🔒</span>
+        </button>
+        <div id="secretMessage" class="secret-message hidden">
+          <div class="pixel-heart">♥</div>
+          <h3>¡Encontraste el secreto!</h3>
+          <p>Si pudiera guardar un solo recuerdo en un cofre para llevarlo a cualquier mundo, elegiria toda las cojidas .</p>
+          <strong>Te quiero muchísimo. ❤️</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-section">
+      <div class="portal"></div>
+      <p class="eyebrow">FIN DE LA AVENTURA</p>
+      <h2>De todos los mundos posibles,<br>te elegiría a vos en cada uno. ❤️</h2>
+      <button id="backBtn" class="mc-btn">VOLVER A NUESTRO MUNDO</button>
+    </section>
+
+    <footer>HECHO CON ❤️ PARA NUESTRO MUNDO</footer>
+  </main>
+
+  <div id="lightbox" class="lightbox hidden">
+    <button id="closeLightbox" class="close" aria-label="Cerrar">×</button>
+    <button id="prevPhoto" class="photo-nav prev" aria-label="Anterior">‹</button>
+    <div class="lightbox-content">
+      <img id="lightboxImg" src="" alt="">
+      <div>
+        <p id="lightboxLabel" class="eyebrow"></p>
+        <h3 id="lightboxTitle"></h3>
+      </div>
+    </div>
+    <button id="nextPhoto" class="photo-nav next" aria-label="Siguiente">›</button>
+  </div>
+
+  <audio id="bgMusic" loop preload="auto" src="./musica/cancion.mp3"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
