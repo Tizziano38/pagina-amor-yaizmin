@@ -1,14 +1,44 @@
 const memories = [
-  { name: "cuando vino a la casa de mis abuelos.jpg", description: "Un recuerdo especial de cuando vino a la casa de mis abuelos." },
-  { name: "foto con mi perro oddy.jpg", description: "Un momento con Oddy que también forma parte de nuestra historia." },
-  { name: "Foto de la casa de minecraft.jpg", description: "Nuestra construcción dentro de Minecraft." },
-  { name: "foto graciosa de los dos.jpg", description: "Una de esas fotos que nos hacen reír cada vez que la vemos." },
-  { name: "nuestra primera historia juntos.jpg", description: "Un recuerdo de nuestra primera historia juntos." },
-  { name: "primera juntada.jpg", description: "Nuestra primera juntada." },
-  { name: "primera mascota en miecraft.jpg", description: "Nuestra primera mascota en Minecraft." },
-  { name: "segunda vez que vino a casa.jpg", description: "La segunda vez que vino a casa." },
-  { name: "Te amo morocha colorada cartel de minecraft.jpg", description: "Un mensaje de amor dentro de nuestro mundo de Minecraft." },
-  { name: "ultima foto que nos sacamos.jpg", description: "La última foto que nos sacamos." }
+  {
+    name: "cuando vino a la casa de mis abuelos.jpg",
+    description: "Un recuerdo especial de cuando vino a la casa de mis abuelos."
+  },
+  {
+    name: "foto con mi perro oddy.jpg",
+    description: "Un momento con Oddy que también forma parte de nuestra historia."
+  },
+  {
+    name: "Foto de la casa de minecraft.jpg",
+    description: "Nuestra construcción dentro de Minecraft."
+  },
+  {
+    name: "foto graciosa de los dos.jpg",
+    description: "Una de esas fotos que nos hacen reír cada vez que la vemos."
+  },
+  {
+    name: "nuestra primera historia juntos.jpg",
+    description: "Un recuerdo de nuestra primera historia juntos."
+  },
+  {
+    name: "primera juntada.jpg",
+    description: "Nuestra primera juntada."
+  },
+  {
+    name: "primera mascota en miecraft.jpg",
+    description: "Nuestra primera mascota en Minecraft."
+  },
+  {
+    name: "segunda vez que vino a casa.jpg",
+    description: "La segunda vez que vino a casa."
+  },
+  {
+    name: "Te amo morocha colorada cartel de minecraft.jpg",
+    description: "Un mensaje de amor dentro de nuestro mundo de Minecraft."
+  },
+  {
+    name: "ultima foto que nos sacamos.jpg",
+    description: "La última foto que nos sacamos."
+  }
 ];
 
 const loadingScreen = document.querySelector("#loadingScreen");
@@ -29,166 +59,414 @@ const lightbox = document.querySelector("#lightbox");
 const lightboxImg = document.querySelector("#lightboxImg");
 const lightboxTitle = document.querySelector("#lightboxTitle");
 const lightboxLabel = document.querySelector("#lightboxLabel");
+
 let currentPhoto = 0;
 let musicOn = false;
 
-const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-const photoPath = file => "fotos/" + encodeURIComponent(file).replace(/%2F/g, "/");
+// Evita problemas con caracteres especiales en los textos
+const esc = value =>
+  String(value).replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[c]));
 
-function renderMemories(){
-  memoryGrid.innerHTML = memories.map((m,i) => `
+// IMPORTANTE:
+// Las fotos están en la carpeta principal de GitHub,
+// por eso NO usamos "fotos/".
+const photoPath = file => encodeURIComponent(file);
+
+function removeExt(name) {
+  return name.replace(/\.[^/.]+$/, "");
+}
+
+function renderMemories() {
+  memoryGrid.innerHTML = memories.map((m, i) => `
     <article class="memory-card" data-index="${i}">
+
       <div class="memory-photo">
-        <img src="${photoPath(m.name)}" alt="${esc(m.name)}" loading="lazy"
-             onerror="this.style.opacity='.15'; this.insertAdjacentHTML('afterend','<div style=&quot;position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center;font-weight:800&quot;>Falta colocar esta foto en la carpeta <b>fotos</b>.</div>')">
+        <img
+          src="${photoPath(m.name)}"
+          alt="${esc(m.name)}"
+          loading="lazy"
+          onerror="
+            this.style.opacity='.15';
+            this.insertAdjacentHTML(
+              'afterend',
+              '<div style=&quot;position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center;font-weight:800&quot;>No se pudo cargar esta foto.</div>'
+            );
+          "
+        >
       </div>
+
       <div class="memory-info">
         <h3>${esc(removeExt(m.name))}</h3>
         <p>${esc(m.description)}</p>
-        <button class="photo-btn" type="button">🔎 VER RECUERDO</button>
+        <button class="photo-btn" type="button">
+          🔎 VER RECUERDO
+        </button>
       </div>
+
     </article>
   `).join("");
 
-  document.querySelectorAll(".memory-card").forEach(card=>{
-    card.querySelector(".photo-btn").addEventListener("click",()=>openPhoto(Number(card.dataset.index)));
-    card.querySelector("img").addEventListener("click",()=>openPhoto(Number(card.dataset.index)));
+  document.querySelectorAll(".memory-card").forEach(card => {
+
+    const index = Number(card.dataset.index);
+
+    card.querySelector(".photo-btn").addEventListener(
+      "click",
+      () => openPhoto(index)
+    );
+
+    card.querySelector("img").addEventListener(
+      "click",
+      () => openPhoto(index)
+    );
+
   });
 }
-function removeExt(name){return name.replace(/\.[^/.]+$/,"")}
 
-function openPhoto(index){
-  currentPhoto=index;
-  const m=memories[currentPhoto];
-  lightboxImg.src=photoPath(m.name);
-  lightboxImg.alt=m.name;
-  lightboxTitle.textContent=removeExt(m.name);
-  lightboxLabel.textContent=`RECUERDO ${currentPhoto+1} / ${memories.length}`;
+function openPhoto(index) {
+  currentPhoto = index;
+
+  const m = memories[currentPhoto];
+
+  lightboxImg.src = photoPath(m.name);
+  lightboxImg.alt = m.name;
+
+  lightboxTitle.textContent = removeExt(m.name);
+
+  lightboxLabel.textContent =
+    `RECUERDO ${currentPhoto + 1} / ${memories.length}`;
+
   lightbox.classList.remove("hidden");
-  document.body.style.overflow="hidden";
+
+  document.body.style.overflow = "hidden";
 }
-function closePhoto(){
+
+function closePhoto() {
   lightbox.classList.add("hidden");
-  document.body.style.overflow="";
+  document.body.style.overflow = "";
 }
-function changePhoto(step){
-  currentPhoto=(currentPhoto+step+memories.length)%memories.length;
+
+function changePhoto(step) {
+  currentPhoto =
+    (currentPhoto + step + memories.length) % memories.length;
+
   openPhoto(currentPhoto);
 }
 
-function updateProgress(){
-  const memoriesTop=document.querySelector("#memories").getBoundingClientRect().top + window.scrollY;
-  const max=Math.max(document.body.scrollHeight-window.innerHeight,1);
-  const pct=Math.min(100,Math.max(0,Math.round((window.scrollY/max)*100)));
-  progressBar.style.width=pct+"%";
-  progressText.textContent=pct+"%";
+function updateProgress() {
+
+  const max = Math.max(
+    document.body.scrollHeight - window.innerHeight,
+    1
+  );
+
+  const pct = Math.min(
+    100,
+    Math.max(
+      0,
+      Math.round((window.scrollY / max) * 100)
+    )
+  );
+
+  progressBar.style.width = pct + "%";
+  progressText.textContent = pct + "%";
 }
-function createParticles(){
-  const holder=document.querySelector("#particles");
-  for(let i=0;i<28;i++){
-    const p=document.createElement("span");
-    p.textContent=Math.random()>.5?"♥":"✦";
-    p.style.position="fixed"; p.style.left=Math.random()*100+"vw"; p.style.top=Math.random()*100+"vh";
-    p.style.zIndex="60"; p.style.pointerEvents="none"; p.style.opacity=(.2+Math.random()*.45).toFixed(2);
-    p.style.fontSize=(8+Math.random()*12)+"px";
-    p.style.animation=`floatParticle ${5+Math.random()*6}s linear ${-Math.random()*8}s infinite`;
+
+function createParticles() {
+
+  const holder = document.querySelector("#particles");
+
+  for (let i = 0; i < 28; i++) {
+
+    const p = document.createElement("span");
+
+    p.textContent = Math.random() > 0.5 ? "♥" : "✦";
+
+    p.style.position = "fixed";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.top = Math.random() * 100 + "vh";
+
+    p.style.zIndex = "60";
+    p.style.pointerEvents = "none";
+
+    p.style.opacity =
+      (0.2 + Math.random() * 0.45).toFixed(2);
+
+    p.style.fontSize =
+      (8 + Math.random() * 12) + "px";
+
+    p.style.animation =
+      `floatParticle ${5 + Math.random() * 6}s linear ${-Math.random() * 8}s infinite`;
+
     holder.appendChild(p);
   }
 }
-const style=document.createElement("style");
-style.textContent="@keyframes floatParticle{0%{transform:translateY(20px) rotate(0);opacity:0}20%{opacity:.5}100%{transform:translateY(-110px) rotate(180deg);opacity:0}}";
+
+// Animación de partículas
+const style = document.createElement("style");
+
+style.textContent = `
+@keyframes floatParticle {
+  0% {
+    transform: translateY(20px) rotate(0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: .5;
+  }
+
+  100% {
+    transform: translateY(-110px) rotate(180deg);
+    opacity: 0;
+  }
+}
+`;
+
 document.head.appendChild(style);
 
-function startWorld(){
+function startWorld() {
+
   startScreen.classList.add("hidden");
   world.classList.remove("hidden");
-  window.scrollTo({top:0,behavior:"instant"});
+
+  window.scrollTo({
+    top: 0,
+    behavior: "instant"
+  });
+
   createParticles();
   updateProgress();
 }
-enterBtn.addEventListener("click",startWorld);
-exploreBtn.addEventListener("click",()=>document.querySelector("#memories").scrollIntoView({behavior:"smooth"}));
-backBtn.addEventListener("click",()=>document.querySelector("#worldTop").scrollIntoView({behavior:"smooth"}));
 
-chestBtn.addEventListener("click",()=>{
-  chestBtn.classList.toggle("open");
-  secretMessage.classList.toggle("hidden");
-  if(!secretMessage.classList.contains("hidden")) secretMessage.scrollIntoView({behavior:"smooth",block:"center"});
+enterBtn.addEventListener("click", startWorld);
+
+exploreBtn.addEventListener("click", () => {
+  document
+    .querySelector("#memories")
+    .scrollIntoView({
+      behavior: "smooth"
+    });
 });
 
-musicBtn.addEventListener("click", async ()=>{
+backBtn.addEventListener("click", () => {
+  document
+    .querySelector("#worldTop")
+    .scrollIntoView({
+      behavior: "smooth"
+    });
+});
+
+// Cofre / mensaje secreto
+chestBtn.addEventListener("click", () => {
+
+  chestBtn.classList.toggle("open");
+  secretMessage.classList.toggle("hidden");
+
+  if (!secretMessage.classList.contains("hidden")) {
+
+    secretMessage.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+  }
+});
+
+// Música
+musicBtn.addEventListener("click", async () => {
+
   if (musicOn) {
+
     bgMusic.pause();
+
     musicOn = false;
+
     musicBtn.textContent = "🎵 Música";
+
     return;
   }
 
   try {
-    // Esperamos a que el navegador termine de cargar el archivo.
+
     if (bgMusic.readyState < 2) {
+
       bgMusic.load();
+
       await new Promise((resolve, reject) => {
-        const ok = () => { cleanup(); resolve(); };
-        const fail = () => { cleanup(); reject(new Error("No se pudo cargar el MP3")); };
+
+        const ok = () => {
+          cleanup();
+          resolve();
+        };
+
+        const fail = () => {
+          cleanup();
+          reject(
+            new Error("No se pudo cargar el MP3")
+          );
+        };
+
         const cleanup = () => {
           bgMusic.removeEventListener("canplay", ok);
           bgMusic.removeEventListener("error", fail);
         };
-        bgMusic.addEventListener("canplay", ok, {once:true});
-        bgMusic.addEventListener("error", fail, {once:true});
+
+        bgMusic.addEventListener(
+          "canplay",
+          ok,
+          { once: true }
+        );
+
+        bgMusic.addEventListener(
+          "error",
+          fail,
+          { once: true }
+        );
+
       });
     }
 
     bgMusic.volume = 0.35;
+
     await bgMusic.play();
+
     musicOn = true;
+
     musicBtn.textContent = "🔊 Silenciar";
+
   } catch (error) {
+
     console.error("Error con la música:", error);
-    musicBtn.textContent = "❌ Revisá cancion.mp3";
+
+    musicBtn.textContent = "❌ Revisá la canción";
+
     setTimeout(() => {
       musicBtn.textContent = "🎵 Música";
     }, 3000);
   }
 });
 
-document.querySelector("#closeLightbox").addEventListener("click",closePhoto);
-document.querySelector("#prevPhoto").addEventListener("click",()=>changePhoto(-1));
-document.querySelector("#nextPhoto").addEventListener("click",()=>changePhoto(1));
-lightbox.addEventListener("click",e=>{if(e.target===lightbox)closePhoto()});
-document.addEventListener("keydown",e=>{
-  if(lightbox.classList.contains("hidden"))return;
-  if(e.key==="Escape")closePhoto();
-  if(e.key==="ArrowLeft")changePhoto(-1);
-  if(e.key==="ArrowRight")changePhoto(1);
+// Lightbox
+document
+  .querySelector("#closeLightbox")
+  .addEventListener("click", closePhoto);
+
+document
+  .querySelector("#prevPhoto")
+  .addEventListener("click", () => changePhoto(-1));
+
+document
+  .querySelector("#nextPhoto")
+  .addEventListener("click", () => changePhoto(1));
+
+lightbox.addEventListener("click", e => {
+
+  if (e.target === lightbox) {
+    closePhoto();
+  }
+
 });
 
-let touchStartX=0;
-lightbox.addEventListener("touchstart",e=>touchStartX=e.changedTouches[0].screenX,{passive:true});
-lightbox.addEventListener("touchend",e=>{
-  const dx=e.changedTouches[0].screenX-touchStartX;
-  if(Math.abs(dx)>50)changePhoto(dx<0?1:-1);
-},{passive:true});
+// Teclado
+document.addEventListener("keydown", e => {
 
-window.addEventListener("scroll",()=>{
-  updateProgress();
-  document.querySelectorAll(".memory-card").forEach(card=>{
-    if(card.getBoundingClientRect().top < window.innerHeight*.88) card.classList.add("visible");
-  });
-},{passive:true});
+  if (lightbox.classList.contains("hidden")) {
+    return;
+  }
 
+  if (e.key === "Escape") {
+    closePhoto();
+  }
+
+  if (e.key === "ArrowLeft") {
+    changePhoto(-1);
+  }
+
+  if (e.key === "ArrowRight") {
+    changePhoto(1);
+  }
+
+});
+
+// Gestos para celular
+let touchStartX = 0;
+
+lightbox.addEventListener(
+  "touchstart",
+  e => {
+    touchStartX = e.changedTouches[0].screenX;
+  },
+  { passive: true }
+);
+
+lightbox.addEventListener(
+  "touchend",
+  e => {
+
+    const dx =
+      e.changedTouches[0].screenX - touchStartX;
+
+    if (Math.abs(dx) > 50) {
+      changePhoto(dx < 0 ? 1 : -1);
+    }
+
+  },
+  { passive: true }
+);
+
+// Scroll
+window.addEventListener(
+  "scroll",
+  () => {
+
+    updateProgress();
+
+    document
+      .querySelectorAll(".memory-card")
+      .forEach(card => {
+
+        if (
+          card.getBoundingClientRect().top <
+          window.innerHeight * 0.88
+        ) {
+          card.classList.add("visible");
+        }
+
+      });
+
+  },
+  { passive: true }
+);
+
+// Renderizar las fotos
 renderMemories();
 
-let progress=0;
-const timer=setInterval(()=>{
-  progress+=10;
-  loadingFill.style.width=progress+"%";
-  if(progress>=100){
+// Pantalla de carga
+let progress = 0;
+
+const timer = setInterval(() => {
+
+  progress += 10;
+
+  loadingFill.style.width = progress + "%";
+
+  if (progress >= 100) {
+
     clearInterval(timer);
-    setTimeout(()=>{
+
+    setTimeout(() => {
+
       loadingScreen.classList.add("hidden");
       startScreen.classList.remove("hidden");
-    },350);
+
+    }, 350);
   }
-},120);
+
+}, 120);
