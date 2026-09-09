@@ -1,0 +1,21 @@
+# NUESTRO MUNDO ❤️ — instrucciones
+
+## Fotos
+Poné las 10 fotos dentro de `fotos/` usando exactamente los nombres indicados.
+
+## Música — IMPORTANTE
+1. Tu archivo tiene que ser realmente un archivo **MP3**.
+2. Renombralo exactamente a:
+   `cancion.mp3`
+3. Colocalo exactamente aquí:
+   `musica/cancion.mp3`
+4. La estructura tiene que quedar:
+   `Nuestro_Mundo_Minecraft/musica/cancion.mp3`
+
+## Cómo abrir la página
+Recomendado: abrir la carpeta en Visual Studio Code y usar **Live Server** sobre `index.html`.
+
+Si abrís el HTML directamente, algunos navegadores pueden comportarse distinto con archivos locales. La música se activa tocando `🎵 Música`; no intenta reproducirse automáticamente porque los navegadores suelen bloquear el autoplay.
+
+## Si sigue sin sonar
+Probá otro MP3 para comprobar que el archivo no esté dañado. También asegurate de que Windows no lo haya dejado como `cancion.mp3.mp3` (en Explorador de archivos activá "Extensiones de nombre de archivo").
